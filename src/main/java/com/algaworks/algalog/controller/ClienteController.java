@@ -1,6 +1,6 @@
-package controller;
+package com.algaworks.algalog.controller;
 
-import model.Cliente;
+import com.algaworks.algalog.model.Cliente;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
