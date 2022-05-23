@@ -29,12 +29,14 @@ public class ClientController {
 
     @GetMapping("/clients/{clientId}")
     public ResponseEntity<Client> search(@PathVariable Long clientId) {
-        Optional<Client> client = clientRepository.findById(clientId);
+        return clientRepository.findById(clientId)
+                .map (client -> ResponseEntity.ok(client))
+                .orElse(ResponseEntity.notFound().build());
 
-        if (client.isPresent()) {
-            return ResponseEntity.ok(client.get());
-        }
-
-        return ResponseEntity.notFound().build();
+//        if (client.isPresent()) {
+//            return ResponseEntity.ok(client.get());
+//        }
+//
+//        return ResponseEntity.notFound().build();
     }
 }
