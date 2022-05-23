@@ -17,27 +17,26 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
+@GetMapping("/clients")
 public class ClientController {
 
     @Autowired
     private ClientRepository clientRepository;
 
-    @GetMapping("/clients")
+    @GetMapping
     public List<Client> list() {
         return clientRepository.findAll();
     }
 
-    @GetMapping("/clients/{clientId}")
+    @GetMapping("/{clientId}")
     public ResponseEntity<Client> search(@PathVariable Long clientId) {
         return clientRepository.findById(clientId)
-//                .map (client -> ResponseEntity.ok(client))
+//              .map (client -> ResponseEntity.ok(client))
                 .map (ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
 
 //        if (client.isPresent()) {
 //            return ResponseEntity.ok(client.get());
-//        }
-//
-//        return ResponseEntity.notFound().build();
+//        } return ResponseEntity.notFound().build();
     }
 }
