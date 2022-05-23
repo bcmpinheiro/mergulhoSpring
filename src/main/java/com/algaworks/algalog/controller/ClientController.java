@@ -30,7 +30,8 @@ public class ClientController {
     @GetMapping("/clients/{clientId}")
     public ResponseEntity<Client> search(@PathVariable Long clientId) {
         return clientRepository.findById(clientId)
-                .map (client -> ResponseEntity.ok(client))
+//                .map (client -> ResponseEntity.ok(client))
+                .map (ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
 
 //        if (client.isPresent()) {
