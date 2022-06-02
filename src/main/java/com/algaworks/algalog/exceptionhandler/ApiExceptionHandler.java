@@ -2,6 +2,7 @@ package com.algaworks.algalog.exceptionhandler;
 
 import lombok.AllArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         for (ObjectError error : ex.getBindingResult().getAllErrors()) {
             String name = ((FieldError) error).getField();
-            String message = error.getDefaultMessage();
+            String message = messageSource.getMessage(error, LocaleContextHolder.getLocale());
 
             fields.add(new Problem.Field(name, message));
         }
