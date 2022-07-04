@@ -8,6 +8,7 @@ import lombok.Setter;
 public class ReceiverModel {
 
     private String name;
+    private ClientResumeModel client;
     private String adress;
     private String number;
     private String complement;

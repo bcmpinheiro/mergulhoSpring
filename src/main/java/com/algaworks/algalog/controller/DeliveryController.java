@@ -1,11 +1,12 @@
 package com.algaworks.algalog.controller;
 
+import com.algaworks.algalog.assembler.DeliveryAssembler;
 import com.algaworks.algalog.domain.model.Delivery;
 import com.algaworks.algalog.domain.repository.DeliveryRepository;
 import com.algaworks.algalog.domain.service.DeliveryServiceRequest;
 import com.algaworks.algalog.model.DeliveryModel;
+import com.algaworks.algalog.model.input.DeliveryInput;
 import lombok.AllArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,24 +21,27 @@ public class DeliveryController {
 
     private DeliveryRepository deliveryRepository;
     private DeliveryServiceRequest deliveryServiceRequest;
-    private ModelMapper modelMapper;
+    private DeliveryAssembler deliveryAssembler;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Delivery request(@Valid @RequestBody Delivery delivery) {
-        return deliveryServiceRequest.request(delivery);
+    public DeliveryModel request(@Valid @RequestBody DeliveryInput deliveryInput) {
+        Delivery newDelivery = deliveryAssembler.toEntity(deliveryInput);
+        Delivery deliveryRequest = deliveryServiceRequest.request(newDelivery);
+
+        return deliveryAssembler.toModel(deliveryRequest);
     }
 
     @GetMapping
-    public List<Delivery> list() {
-        return deliveryRepository.findAll();
+    public List<DeliveryModel> list() {
+        return deliveryAssembler.toCollectionModel(deliveryRepository.findAll());
     }
 
     @GetMapping("/{deliveryId}")
     public ResponseEntity<DeliveryModel> search(@PathVariable Long deliveryId) {
         return deliveryRepository.findById(deliveryId)
-                .map(delivery -> {
-                    DeliveryModel deliveryModel = modelMapper.map(delivery, DeliveryModel.class);
+                .map(delivery -> ResponseEntity.ok(deliveryAssembler.toModel(delivery)))
+                .orElse(ResponseEntity.notFound().build());
 
 //                    DeliveryModel deliveryModel = new DeliveryModel();
 //                    deliveryModel.setId(delivery.getId());
@@ -52,10 +56,6 @@ public class DeliveryController {
 //                    deliveryModel.setStatus(delivery.getStatus());
 //                    deliveryModel.setDateRequest(delivery.getDateRequest());
 //                    deliveryModel.setDateFinish(delivery.getDateFinish());
-
-                    return ResponseEntity.ok(deliveryModel);
-                })
-                .orElse(ResponseEntity.notFound().build());
     }
 }
 
