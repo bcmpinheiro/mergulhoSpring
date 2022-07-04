@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,9 +28,13 @@ public class Delivery {
 
     private BigDecimal tax;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @Enumerated(EnumType.STRING)
     private StatusDelivery status;
 
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime dateRequest;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDateTime dateFinish;
 }
