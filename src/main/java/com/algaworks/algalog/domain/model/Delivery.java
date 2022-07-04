@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class ClientDelivery {
+public class Delivery {
 
     @EqualsAndHashCode.Include
     @Id
@@ -25,10 +25,11 @@ public class ClientDelivery {
     @Embedded
     private Receiver receiver;
 
-    @Enumerated(EnumType.STRING)
-    private StatusDelivery statusDelivery;
-
     private BigDecimal tax;
+
+    @Enumerated(EnumType.STRING)
+    private StatusDelivery status;
+
     private LocalDateTime dateRequest;
     private LocalDateTime dateFinish;
 }

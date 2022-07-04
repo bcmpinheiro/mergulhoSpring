@@ -2,8 +2,8 @@ create table delivery (
     id bigint not null auto_increment,
     client_id bigint not null,
     tax decimal(10,2) not null,
-    status varchar(20) not null,
-    date_request datetime not null,
+    status varchar(20),
+    date_request datetime,
     date_finish datetime,
 
     receiver_name varchar(60) not null,
