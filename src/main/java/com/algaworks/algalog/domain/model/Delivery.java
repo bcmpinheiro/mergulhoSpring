@@ -7,6 +7,8 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,10 +29,24 @@ public class Delivery {
 
     private BigDecimal tax;
 
+    @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
+    private List<Incident> incidents = new ArrayList<>();
+
     @Enumerated(EnumType.STRING)
     private StatusDelivery status;
 
     private OffsetDateTime dateRequest;
 
     private OffsetDateTime dateFinish;
+
+    public Incident addIncident(String description) {
+        Incident incident = new Incident();
+        incident.setDescription(description);
+        incident.setDateRegister(OffsetDateTime.now());
+        incident.setDelivery(this);
+
+        this.getIncidents().add(incident);
+
+        return incident;
+    }
 }
