@@ -4,6 +4,7 @@ import com.algaworks.algalog.assembler.DeliveryAssembler;
 import com.algaworks.algalog.domain.model.Delivery;
 import com.algaworks.algalog.domain.repository.DeliveryRepository;
 import com.algaworks.algalog.domain.service.DeliveryServiceRequest;
+import com.algaworks.algalog.domain.service.FinishDeliveryService;
 import com.algaworks.algalog.model.DeliveryModel;
 import com.algaworks.algalog.model.input.DeliveryInput;
 import lombok.AllArgsConstructor;
@@ -22,6 +23,7 @@ public class DeliveryController {
     private DeliveryRepository deliveryRepository;
     private DeliveryServiceRequest deliveryServiceRequest;
     private DeliveryAssembler deliveryAssembler;
+    private FinishDeliveryService finishDeliveryService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,7 +33,6 @@ public class DeliveryController {
 
         return deliveryAssembler.toModel(deliveryRequest);
     }
-
     @GetMapping
     public List<DeliveryModel> list() {
         return deliveryAssembler.toCollectionModel(deliveryRepository.findAll());
@@ -42,20 +43,12 @@ public class DeliveryController {
         return deliveryRepository.findById(deliveryId)
                 .map(delivery -> ResponseEntity.ok(deliveryAssembler.toModel(delivery)))
                 .orElse(ResponseEntity.notFound().build());
+    }
 
-//                    DeliveryModel deliveryModel = new DeliveryModel();
-//                    deliveryModel.setId(delivery.getId());
-//                    deliveryModel.setNameClient(delivery.getClient().getName());
-//                    deliveryModel.setReceiver(new ReceiverModel());
-//                    deliveryModel.getReceiver().setName(delivery.getReceiver().getName());
-//                    deliveryModel.getReceiver().setAdress(delivery.getReceiver().getAdress());
-//                    deliveryModel.getReceiver().setNumber(delivery.getReceiver().getNumber());
-//                    deliveryModel.getReceiver().setComplement(delivery.getReceiver().getComplement());
-//                    deliveryModel.getReceiver().setDistrict(delivery.getReceiver().getDistrict());
-//                    deliveryModel.setTax(delivery.getTax());
-//                    deliveryModel.setStatus(delivery.getStatus());
-//                    deliveryModel.setDateRequest(delivery.getDateRequest());
-//                    deliveryModel.setDateFinish(delivery.getDateFinish());
+    @PutMapping("/{deliveryId}/finish")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finish(@PathVariable Long deliveryId) {
+        finishDeliveryService.finished(deliveryId);
     }
 }
 

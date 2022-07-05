@@ -1,5 +1,6 @@
 package com.algaworks.algalog.domain.model;
 
+import com.algaworks.algalog.domain.exception.BusinessException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -48,5 +49,19 @@ public class Delivery {
         this.getIncidents().add(incident);
 
         return incident;
+    }
+    public void finish() {
+        if (cantBeFinish()) {
+            throw new BusinessException("Entrega não pode ser finalizada");
+        }
+
+        setStatus(StatusDelivery.FINISHED);
+        setDateFinish(OffsetDateTime.now());
+    }
+    public boolean canBeFinish() {
+        return StatusDelivery.PENDING.equals(getStatus());
+    }
+    public boolean cantBeFinish() {
+        return !canBeFinish();
     }
 }
